@@ -35,7 +35,7 @@ from python, ipython or bpython:
 It works as node.js EventEmitters, inspired by pyee (https://github.com/jesusabdullah/pyee).
 The same syntax applies, it packs the message as json, with a node id.
 Internally it avoids feedbacking the message back to the original sender.
-
+Run this example in different terminals
 
     from mure.dee import DistEventEmitter
     import os, json, time
