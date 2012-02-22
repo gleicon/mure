@@ -8,12 +8,12 @@ log.set_threshold(log.INFO)
 
 setup(
         name            = "mure",
-        version         = "0.1",
+        version         = "0.2",
 
         packages        = ['mure', ],
         zip_safe = False,
         install_requires = ['%s>=%s' % x for x in dict(
-            gevent         = "1.0.0",
+            gevent         = "0.13.6",
             kombu          = "1.5.1",
         ).items()],
 
