@@ -20,7 +20,7 @@ def msg_listener(msg):
 
 def main():
     dbus.emit('join', "oeam")
-    dbus.on('message', msg_listener)
+    dbus.on('/workers/delicious', msg_listener)
     producer()
 
 if __name__ == "__main__":

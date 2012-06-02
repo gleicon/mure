@@ -1,5 +1,5 @@
 from __future__ import with_statement
-from kombu import BrokerConnection
+from kombu import BrokerConnection, Exchange, Queue
 from collections import defaultdict
 import gevent
 from gevent import monkey
@@ -19,11 +19,12 @@ class WorkerHub():
     def add_worker(self, workername, callback):
         self.workers[workername].add(callback)
         def _listener():
+            qname = Queue(workername, Exchange("exchange:%s" % workername, type='fanout'))
             while self._connected == False:
                 print "waiting %s" % self._connected
                 gevent.sleep(1)
             with BrokerConnection(self._transport_url) as conn:
-                with conn.SimpleQueue(workername) as queue:
+                with conn.SimpleQueue(qname) as queue:
                     while True:
                         try:
                             message = queue.get(block=True, timeout=10)
@@ -41,8 +42,9 @@ class WorkerHub():
 
     def send_message(self, workername, message):
         if self._connected == False: return
+        qname = Queue(workername, Exchange("exchange:%s" % workername, type='fanout'))
         with BrokerConnection(self._transport_url) as conn:
-            with conn.SimpleQueue(workername) as queue:
+            with conn.SimpleQueue(qname) as queue:
                 queue.put(message)
 
     def connect(self, transport_url=None):

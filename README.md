@@ -65,6 +65,14 @@ Run this example in different terminals
 
     if __name__ == "__main__":
         main()
+### node.js binding
+
+    If you are using kombu + redis there is a binding on node.js/ dir that reproduces its protocol on a kind of distributed event emitter. 
+
+    var dee = require("./dee")
+    dee = dee.create_dee();                                                         
+    dee.worker("/workers/jazz", function(w) { console.log(w) });                    
+    dee.send_message("/workers/delicious", "wot");
 
 ### More examples
     Check examples/ dir, run slacker.py in a terminal and play around

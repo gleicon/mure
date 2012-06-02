@@ -8,7 +8,7 @@ log.set_threshold(log.INFO)
 
 setup(
         name            = "mure",
-        version         = "0.2",
+        version         = "0.4",
 
         packages        = ['mure', ],
         zip_safe = False,
