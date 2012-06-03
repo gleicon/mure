@@ -1,7 +1,7 @@
 # Distributed Event Emitter inspired by pyee
 from __future__ import with_statement
 from collections import defaultdict
-from kombu import BrokerConnection
+from kombu import BrokerConnection, Exchange, Queue
 import os, json
 import gevent
 from gevent import monkey
@@ -18,8 +18,10 @@ class DistEventEmitter:
         self._timeout = timeout
 
     def _watcher(self, event):
+        qname = Queue(event, Exchange("exchange:%s" % event,
+            type='fanout'))
         with BrokerConnection(self._transport_url) as conn:
-            with conn.SimpleQueue(event) as queue:
+            with conn.SimpleQueue(qname) as queue:
                 while True:
                     try:
                         message = queue.get(block=True, timeout=10)
@@ -30,8 +32,10 @@ class DistEventEmitter:
                         pass
 
     def _broadcast(self, event, message):
+        qname = Queue(event, Exchange("exchange:%s" % event,
+            type='fanout'))
         with BrokerConnection(self._transport_url) as conn:
-            with conn.SimpleQueue(event) as queue:
+            with conn.SimpleQueue(qname) as queue:
                 queue.put(message)
 
     def on(self, event, fun):
