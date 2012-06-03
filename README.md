@@ -65,14 +65,34 @@ Run this example in different terminals
 
     if __name__ == "__main__":
         main()
+
 ### node.js binding
 
     If you are using kombu + redis there is a binding on node.js/ dir that reproduces its protocol on a kind of distributed event emitter. 
+    Basically it is a 2 or more channel redis based kombu port for node.js integrated to EventEmitter.  
 
+On node.js
+    
     var dee = require("./dee")
     dee = dee.create_dee();                                                         
     dee.worker("/workers/jazz", function(w) { console.log(w) });                    
     dee.send_message("/workers/delicious", "wot");
+
+On Python
+
+    from mure.dee import DistEventEmitter
+    dbus = DistEventEmitter()
+
+    def msg_listener(msg): 
+        print "received message: %s" % msg                                          
+                                                                                
+    def main():
+        dbus.on('/workers/delicious', msg_listener)    
+
+    if __name__ == "__main__":
+        main()
+
+    Run examples/dee_test.py in a term and then node.js/test.js to check the communication. This example is a self-counting event emitter with message exchange between two processes. To the original intent redis support is enough (just cheap signaling to a node.js process that could lose a step)
 
 ### More examples
     Check examples/ dir, run slacker.py in a terminal and play around
