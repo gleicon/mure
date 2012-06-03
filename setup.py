@@ -15,6 +15,7 @@ setup(
         install_requires = ['%s>=%s' % x for x in dict(
             gevent         = "0.13.6",
             kombu          = "1.5.1",
+            pyzmq          = "2.2.0",
         ).items()],
 
         # metadata for upload to PyPI
